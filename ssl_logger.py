@@ -72,9 +72,9 @@ def ssl_log(process, pcap=None, verbose=False):
     NotImplementedError: Not running on a Linux or macOS system.
   """
 
-  if platform.system() not in ("Darwin", "Linux"):
-    raise NotImplementedError("This function is only implemented for Linux and "
-                              "macOS systems.")
+  # if platform.system() not in ("Darwin", "Linux"):
+  #   raise NotImplementedError("This function is only implemented for Linux and "
+  #                             "macOS systems.")
 
   def log_pcap(pcap_file, ssl_session_id, function, src_addr, src_port,
                dst_addr, dst_port, data):
@@ -194,7 +194,11 @@ def ssl_log(process, pcap=None, verbose=False):
 
   print("Press Ctrl+C to stop logging.")
   try:
-    signal.pause()
+    try:
+      signal.pause()
+    except AttributeError:
+      while True:
+        time.sleep(1)
   except KeyboardInterrupt:
     pass
 

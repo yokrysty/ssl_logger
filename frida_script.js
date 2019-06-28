@@ -3,13 +3,25 @@
  */
 function initializeGlobals()
 {
-  addresses = {};
+  global.addresses = {};
   var resolver = new ApiResolver("module");
+
+  function getSocksLib() {
+    var platform = Process.platform;
+    if(platform == 'darwin') {
+        return '*libsystem*';
+    }
+    if (platform == 'windows') {
+        return '*WS2_32*';
+    }
+    return '*libc*';
+  }
+
   var exps = [
     ["*libssl*",
       ["SSL_read", "SSL_write", "SSL_get_fd", "SSL_get_session",
       "SSL_SESSION_get_id"]],
-    [Process.platform == "darwin" ? "*libsystem*" : "*libc*",
+    [getSocksLib(),
       ["getpeername", "getsockname", "ntohs", "ntohl"]]
     ];
   for (var i = 0; i < exps.length; i++)
@@ -49,25 +61,24 @@ function initializeGlobals()
         }
         if (!duplicates_only)
         {
-          throw "More than one match found for " + lib + "!" + name + ": " +
-            s;
+          throw "More than one match found for " + lib + "!" + name + ": " + s;
         }
       }
-      addresses[name] = matches[0].address;
+      global.addresses[name] = matches[0].address;
     }
   }
-  SSL_get_fd = new NativeFunction(addresses["SSL_get_fd"], "int",
+  global.SSL_get_fd = new NativeFunction(addresses["SSL_get_fd"], "int",
     ["pointer"]);
-  SSL_get_session = new NativeFunction(addresses["SSL_get_session"],
+  global.SSL_get_session = new NativeFunction(addresses["SSL_get_session"],
     "pointer", ["pointer"]);
-  SSL_SESSION_get_id = new NativeFunction(addresses["SSL_SESSION_get_id"],
+  global.SSL_SESSION_get_id = new NativeFunction(addresses["SSL_SESSION_get_id"],
     "pointer", ["pointer", "pointer"]);
-  getpeername = new NativeFunction(addresses["getpeername"], "int", ["int",
+  global.getpeername = new NativeFunction(addresses["getpeername"], "int", ["int",
     "pointer", "pointer"]);
-  getsockname = new NativeFunction(addresses["getsockname"], "int", ["int",
+  global.getsockname = new NativeFunction(addresses["getsockname"], "int", ["int",
     "pointer", "pointer"]);
-  ntohs = new NativeFunction(addresses["ntohs"], "uint16", ["uint16"]);
-  ntohl = new NativeFunction(addresses["ntohl"], "uint32", ["uint32"]);
+  global.ntohs = new NativeFunction(addresses["ntohs"], "uint16", ["uint16"]);
+  global.ntohl = new NativeFunction(addresses["ntohl"], "uint32", ["uint32"]);
 }
 initializeGlobals();
 /**
