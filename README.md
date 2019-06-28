@@ -161,6 +161,10 @@ This program uses the [frida](https://www.frida.re/) framework to perform code i
 
 Frida can be installed as follows: `sudo pip install frida`
 
+For verbose output [hexdump](https://bitbucket.org/techtonik/hexdump/) is needed.
+
+Hexdump can be installed as follows: `sudo pip install hexdump`
+
 ## TODO
 
  - Add support for processes that communicate via SSL without using [libssl](https://wiki.openssl.org/index.php/Libssl_API).
