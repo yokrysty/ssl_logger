@@ -104,30 +104,30 @@ def ssl_log(process, pcap=None, verbose=False):
 
     for writes in (
         # PCAP record (packet) header
-        ("=I", int(t)),                   # Timestamp seconds
-        ("=I", (t * 1000000) % 1000000),  # Timestamp microseconds
-        ("=I", 40 + len(data)),           # Number of octets saved
-        ("=i", 40 + len(data)),           # Actual length of packet
-        # IPv4 header
-        (">B", 0x45),                     # Version and Header Length
-        (">B", 0),                        # Type of Service
-        (">H", 40 + len(data)),           # Total Length
-        (">H", 0),                        # Identification
-        (">H", 0x4000),                   # Flags and Fragment Offset
-        (">B", 0xFF),                     # Time to Live
-        (">B", 6),                        # Protocol
-        (">H", 0),                        # Header Checksum
-        (">I", src_addr),                 # Source Address
-        (">I", dst_addr),                 # Destination Address
-        # TCP header
-        (">H", src_port),                 # Source Port
-        (">H", dst_port),                 # Destination Port
-        (">I", seq),                      # Sequence Number
-        (">I", ack),                      # Acknowledgment Number
-        (">H", 0x5018),                   # Header Length and Flags
-        (">H", 0xFFFF),                   # Window Size
-        (">H", 0),                        # Checksum
-        (">H", 0)):                       # Urgent Pointer
+        ("=I", int(t)),                         # Timestamp seconds
+        ("=I", int((t * 1000000) % 1000000)),   # Timestamp microseconds
+        ("=I", 40 + len(data)),                 # Number of octets saved
+        ("=i", 40 + len(data)),                 # Actual length of packet
+        # IPv4 header     
+        (">B", 0x45),                           # Version and Header Length
+        (">B", 0),                              # Type of Service
+        (">H", 40 + len(data)),                 # Total Length
+        (">H", 0),                              # Identification
+        (">H", 0x4000),                         # Flags and Fragment Offset
+        (">B", 0xFF),                           # Time to Live
+        (">B", 6),                              # Protocol
+        (">H", 0),                              # Header Checksum
+        (">I", src_addr),                       # Source Address
+        (">I", dst_addr),                       # Destination Address
+        # TCP header      
+        (">H", src_port),                       # Source Port
+        (">H", dst_port),                       # Destination Port
+        (">I", seq),                            # Sequence Number
+        (">I", ack),                            # Acknowledgment Number
+        (">H", 0x5018),                         # Header Length and Flags
+        (">H", 0xFFFF),                         # Window Size
+        (">H", 0),                              # Checksum
+        (">H", 0)):                             # Urgent Pointer
       pcap_file.write(struct.pack(writes[0], writes[1]))
     pcap_file.write(data)
 
