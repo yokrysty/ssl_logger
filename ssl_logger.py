@@ -161,15 +161,15 @@ def ssl_log(process, pcap=None, verbose=False):
                                   struct.pack(">I", p["src_addr"]))
       dst_addr = socket.inet_ntop(socket.AF_INET,
                                   struct.pack(">I", p["dst_addr"]))
-      print "SSL Session: " + p["ssl_session_id"]
-      print "[%s] %s:%d --> %s:%d" % (
+      print("SSL Session: " + p["ssl_session_id"])
+      print("[%s] %s:%d --> %s:%d" % (
           p["function"],
           src_addr,
           p["src_port"],
           dst_addr,
-          p["dst_port"])
+          p["dst_port"]))
       hexdump.hexdump(data)
-      print
+      print()
     if pcap:
       log_pcap(pcap_file, p["ssl_session_id"], p["function"], p["src_addr"],
                p["src_port"], p["dst_addr"], p["dst_port"], data)
@@ -192,7 +192,7 @@ def ssl_log(process, pcap=None, verbose=False):
   script.on("message", on_message)
   script.load()
 
-  print "Press Ctrl+C to stop logging."
+  print("Press Ctrl+C to stop logging.")
   try:
     signal.pause()
   except KeyboardInterrupt:
@@ -208,12 +208,12 @@ if __name__ == "__main__":
   class ArgParser(argparse.ArgumentParser):
 
     def error(self, message):
-      print "ssl_logger v" + __version__
-      print "by " + __author__
-      print
-      print "Error: " + message
-      print
-      print self.format_help().replace("usage:", "Usage:")
+      print("ssl_logger v" + __version__)
+      print("by " + __author__)
+      print()
+      print("Error: " + message)
+      print()
+      print(self.format_help().replace("usage:", "Usage:"))
       self.exit(0)
 
   parser = ArgParser(
